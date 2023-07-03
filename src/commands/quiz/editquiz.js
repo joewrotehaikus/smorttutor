@@ -242,7 +242,6 @@ module.exports = {
       }
 
       newMessage = addEntryDetails(entry, newMessage);
-      console.log(entry, newMessage);
       // newMessage += `Question:\n> ${entry.question}\n`;
       // entry.answers.forEach((ans, index) => {
       //   if (entry.answers.length === 1) {
@@ -263,8 +262,7 @@ module.exports = {
       console.error(e);
     } finally {
       if (newMessage.length === 0) newMessage += "No questions available";
-      // console.log(newMessage);
-      // await interaction.reply({ content: newMessage, ephemeral });
+      await interaction.reply({ content: newMessage, ephemeral });
     }
   },
 
