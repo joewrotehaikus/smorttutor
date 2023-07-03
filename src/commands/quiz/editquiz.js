@@ -1,0 +1,279 @@
+const {
+  SlashCommandBuilder,
+  ModalBuilder,
+  TextInputBuilder,
+  TextInputStyle,
+  ActionRowBuilder,
+} = require("discord.js");
+const QuizEntry = require("../../models/QuizEntry");
+const levels = require("../../code/levels");
+const { EDIT_QUIZ } = require("../../code/commandNames");
+const addEntryDetails = require("../../code/addEntryDetails");
+
+const topics = require("../../code/topics");
+
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName(`${EDIT_QUIZ}`)
+    .setDescription(
+      "Want to help others test their knowledge? Add a question to SmortQuiz!"
+    )
+    .addSubcommand((command) => {
+      return command
+        .setName(EDIT_QUIZ.sub.EDIT)
+        .setDescription("Edit a question that has already been entered")
+        .addStringOption((option) => {
+          return option
+            .setName("question")
+            .setDescription("The question for this quiz entry")
+            .setRequired(true)
+            .setMaxLength(300)
+            .setAutocomplete(true);
+        })
+        .addStringOption((option) => {
+          return option
+            .setName("topic")
+            .setDescription("Select topic")
+            .setRequired(false)
+            .addChoices(...topics);
+        });
+      // .addIntegerOption((option) => {
+      //   return option
+      //     .setName("level")
+      //     .setDescription(
+      //       "Is this question best described as Beginner, Intermediate, Advanced, or Expert?"
+      //     )
+      //     .addChoices(...levels);
+      // })
+      // .addStringOption((option) => {
+      //   return option
+      //     .setName("question")
+      //     .setDescription("Question or prompt")
+      //     .setMaxLength(300);
+      // })
+      // .addStringOption((option) => {
+      //   return option
+      //     .setName("answer")
+      //     .setDescription(
+      //       "Answer or response to prompt. Please keep this under 30 characters."
+      //     )
+      //     .setMaxLength(30);
+      // })
+      // .addStringOption((option) => {
+      //   return option
+      //     .setName("source")
+      //     .setDescription(
+      //       "A URL to a reliable source that verifies and explains the question and answer."
+      //     )
+      //     .setMaxLength(300);
+      // });
+    })
+    .addSubcommand((command) => {
+      return command
+        .setName(EDIT_QUIZ.sub.ADD)
+        .setDescription("Create a new quiz entry")
+        .addStringOption((option) => {
+          return option
+            .setName("topic")
+            .setDescription("Pick a topic")
+            .setRequired(true)
+            .addChoices(...topics);
+        })
+        .addIntegerOption((option) => {
+          return option
+            .setName("level")
+            .setDescription("How confident are you in your abilities?")
+            .setRequired(true)
+            .addChoices(...levels);
+        })
+        .addStringOption((option) => {
+          return option
+            .setName("question")
+            .setDescription("Question or prompt")
+            .setMinLength(5)
+            .setMaxLength(300)
+            .setRequired(true);
+        })
+        .addStringOption((option) => {
+          return option
+            .setName("answer")
+            .setDescription(
+              "Answer or response to prompt. Please keep this under 30 characters."
+            )
+            .setMaxLength(30)
+            .setRequired(true);
+        })
+        .addStringOption((option) => {
+          return option
+            .setName("source")
+            .setDescription(
+              "A URL to a reliable source that verifies and explains the question and answer."
+            )
+            .setMaxLength(300)
+            .setRequired(true);
+        });
+    }),
+
+  async execute(interaction, client) {
+    let newMessage = "";
+    let ephemeral = false;
+
+    try {
+      let entry;
+      let command = interaction.options.getSubcommand();
+      let user = interaction.user.tag;
+      if (command === EDIT_QUIZ.sub.EDIT) {
+        let id = interaction.options.getString("question");
+        entry = await QuizEntry.findOne({
+          _id: id,
+        });
+        if (!entry) {
+          newMessage += `We could not find a record with the _id "${id}". Please check and try again.\n`;
+          ephemeral = true;
+          return;
+        }
+
+        const modal = new ModalBuilder()
+          .setCustomId("editQuizEntry")
+          .setTitle("Edit this quiz question");
+
+        // const level = new TextInputBuilder()
+        //   .setCustomId("level")
+        //   .setLabel("Level (0-Beginner to 3-Expert)")
+        //   .setValue(`${entry.level}`);
+        // const levelRow = new ActionRowBuilder().addComponents(level);
+
+        const _id = new TextInputBuilder()
+          .setCustomId("id")
+          .setLabel("id")
+          .setStyle(TextInputStyle.Short)
+          .setValue(entry._id.toString());
+        const _idRow = new ActionRowBuilder().addComponents(_id);
+
+        const question = new TextInputBuilder()
+          .setCustomId("question")
+          .setLabel("Question/Prompt")
+          .setStyle(TextInputStyle.Short)
+          .setValue(entry.question);
+        const questionRow = new ActionRowBuilder().addComponents(question);
+
+        let answerRows = [];
+        entry.answers.forEach((ansText, index) => {
+          if (index === 0) {
+            const answer = new TextInputBuilder()
+              .setCustomId(`answer${index}`)
+              .setLabel(`Answer ${index}`)
+              .setStyle(TextInputStyle.Short)
+              .setValue(ansText)
+              .setRequired(false);
+            answerRows.push(new ActionRowBuilder().addComponents(answer));
+          } else {
+            const answer = new TextInputBuilder()
+              .setCustomId(`answer${index}`)
+              .setLabel(`Answer ${index}`)
+              .setStyle(TextInputStyle.Short)
+              .setValue(ansText);
+            answerRows.push(new ActionRowBuilder().addComponents(answer));
+          }
+          if (index === entry.answers.length - 1) {
+            const newAnswer = new TextInputBuilder()
+              .setCustomId("newanswer")
+              .setLabel("New Answer")
+              .setStyle(TextInputStyle.Short)
+              .setRequired(false);
+            answerRows.push(new ActionRowBuilder().addComponents(newAnswer));
+          }
+        });
+
+        let sourceRows = [];
+        entry.sources.forEach((srcText, index) => {
+          const source = new TextInputBuilder()
+            .setCustomId(`source${index}`)
+            .setLabel(`Source ${index}`)
+            .setStyle(TextInputStyle.Short)
+            .setValue(srcText)
+            .setRequired(false);
+          sourceRows.push(new ActionRowBuilder().addComponents(source));
+          if (index === entry.answers.length - 1) {
+            const newSource = new TextInputBuilder()
+              .setCustomId("newsource")
+              .setLabel("New Source")
+              .setStyle(TextInputStyle.Short)
+              .setRequired(false);
+            sourceRows.push(new ActionRowBuilder().addComponents(newSource));
+          }
+        });
+
+        modal.addComponents(
+          // levelRow,
+          _idRow,
+          questionRow,
+          ...answerRows,
+          ...sourceRows
+        );
+
+        await interaction.showModal(modal);
+
+        // let level = interaction.options.get("level");
+        // let question = interaction.options.getString("question");
+        // let answer = interaction.options.getString("answer");
+        // let source = interaction.options.getString("source");
+        // console.log(entry);
+        // if (level) entry.level = level.value;
+        // if (question) entry.question = question;
+        // if (answer) entry.answers.push(answer);
+        // if (source) entry.sources.push(source);
+        // if (!entry.contributors.includes(user)) entry.contributors.push(user);
+        // entry.updated = new Date();
+        // await entry.save();
+      }
+
+      if (command === EDIT_QUIZ.sub.ADD) {
+        entry = new QuizEntry({
+          topic: interaction.options.getString("topic"),
+          level: interaction.options.get("level").value,
+          question: interaction.options.getString("question"),
+          answers: [interaction.options.getString("answer")],
+          contributors: [user],
+          sources: [interaction.options.getString("source")],
+        });
+        newMessage += `Quiz question received!\n\n`;
+        await entry.save();
+      }
+
+      newMessage = addEntryDetails(entry, newMessage);
+      // newMessage += `Question:\n> ${entry.question}\n`;
+      // entry.answers.forEach((ans, index) => {
+      //   if (entry.answers.length === 1) {
+      //     newMessage += `\nAnswer\n`;
+      //   } else {
+      //     newMessage += `\nAnswer ${index}\n`;
+      //   }
+      //   newMessage += `> ${ans}`;
+      // });
+
+      // newMessage += `\n\nTo edit this question, add other acceptable answers, and/or add more reliable sources, use \`/${EDIT_QIZ.ADD}\` and enter \`${entry.slug}\` into the ID option.`;
+    } catch (e) {
+      if (newMessage.length > 0) newMessage += "\n";
+      newMessage += `I'm having trouble with something. I got this error:\n   ${
+        e.name || "Error"
+      }: ${e.message}`;
+      ephemeral = true;
+      console.error(e);
+    } finally {
+      if (newMessage.length === 0) newMessage += "No questions available";
+      // console.log(newMessage);
+      // await interaction.reply({ content: newMessage, ephemeral });
+    }
+  },
+
+  async autocomplete(interaction, client) {
+    const focusedValue = interaction.options.getFocused();
+    const regex = new RegExp(focusedValue, "i");
+    const choices = await QuizEntry.find({ question: { $regex: regex } });
+
+    await interaction.respond(
+      choices.map((choice) => ({ name: choice.question, value: choice._id }))
+    );
+  },
+};
