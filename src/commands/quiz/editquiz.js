@@ -242,6 +242,7 @@ module.exports = {
       }
 
       newMessage = addEntryDetails(entry, newMessage);
+      console.log(entry, newMessage);
       // newMessage += `Question:\n> ${entry.question}\n`;
       // entry.answers.forEach((ans, index) => {
       //   if (entry.answers.length === 1) {
