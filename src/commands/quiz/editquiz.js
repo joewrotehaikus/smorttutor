@@ -37,36 +37,6 @@ module.exports = {
             .setRequired(false)
             .addChoices(...topics);
         });
-      // .addIntegerOption((option) => {
-      //   return option
-      //     .setName("level")
-      //     .setDescription(
-      //       "Is this question best described as Beginner, Intermediate, Advanced, or Expert?"
-      //     )
-      //     .addChoices(...levels);
-      // })
-      // .addStringOption((option) => {
-      //   return option
-      //     .setName("question")
-      //     .setDescription("Question or prompt")
-      //     .setMaxLength(300);
-      // })
-      // .addStringOption((option) => {
-      //   return option
-      //     .setName("answer")
-      //     .setDescription(
-      //       "Answer or response to prompt. Please keep this under 30 characters."
-      //     )
-      //     .setMaxLength(30);
-      // })
-      // .addStringOption((option) => {
-      //   return option
-      //     .setName("source")
-      //     .setDescription(
-      //       "A URL to a reliable source that verifies and explains the question and answer."
-      //     )
-      //     .setMaxLength(300);
-      // });
     })
     .addSubcommand((command) => {
       return command
@@ -136,12 +106,6 @@ module.exports = {
         const modal = new ModalBuilder()
           .setCustomId("editQuizEntry")
           .setTitle("Edit this quiz question");
-
-        // const level = new TextInputBuilder()
-        //   .setCustomId("level")
-        //   .setLabel("Level (0-Beginner to 3-Expert)")
-        //   .setValue(`${entry.level}`);
-        // const levelRow = new ActionRowBuilder().addComponents(level);
 
         const _id = new TextInputBuilder()
           .setCustomId("id")
@@ -213,19 +177,6 @@ module.exports = {
         );
 
         await interaction.showModal(modal);
-
-        // let level = interaction.options.get("level");
-        // let question = interaction.options.getString("question");
-        // let answer = interaction.options.getString("answer");
-        // let source = interaction.options.getString("source");
-        // console.log(entry);
-        // if (level) entry.level = level.value;
-        // if (question) entry.question = question;
-        // if (answer) entry.answers.push(answer);
-        // if (source) entry.sources.push(source);
-        // if (!entry.contributors.includes(user)) entry.contributors.push(user);
-        // entry.updated = new Date();
-        // await entry.save();
       }
 
       if (command === EDIT_QUIZ.sub.ADD) {
@@ -242,17 +193,6 @@ module.exports = {
       }
 
       newMessage = addEntryDetails(entry, newMessage);
-      // newMessage += `Question:\n> ${entry.question}\n`;
-      // entry.answers.forEach((ans, index) => {
-      //   if (entry.answers.length === 1) {
-      //     newMessage += `\nAnswer\n`;
-      //   } else {
-      //     newMessage += `\nAnswer ${index}\n`;
-      //   }
-      //   newMessage += `> ${ans}`;
-      // });
-
-      // newMessage += `\n\nTo edit this question, add other acceptable answers, and/or add more reliable sources, use \`/${EDIT_QIZ.ADD}\` and enter \`${entry.slug}\` into the ID option.`;
     } catch (e) {
       if (newMessage.length > 0) newMessage += "\n";
       newMessage += `I'm having trouble with something. I got this error:\n   ${

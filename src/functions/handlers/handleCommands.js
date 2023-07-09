@@ -1,18 +1,18 @@
 require("dotenv").config();
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-const fs = require("fs");
+const { readdirSync } = require("fs");
 const { CLIENT_ID, GUILD_ID, BOT_TOKEN } = process.env;
 
 module.exports = (client) => {
   client.handleCommands = async () => {
-    const commandFolders = fs.readdirSync("./src/commands");
+    const commandFolders = readdirSync("./src/commands");
     const { commands } = client;
-    const commandArray = []
+    const commandArray = [];
     for (const folder of commandFolders) {
-      const commandFiles = fs
-        .readdirSync(`./src/commands/${folder}`)
-        .filter((file) => file.endsWith(".js"));
+      const commandFiles = readdirSync(`./src/commands/${folder}`).filter(
+        (file) => file.endsWith(".js")
+      );
 
       for (const file of commandFiles) {
         const command = require(`../../commands/${folder}/${file}`);

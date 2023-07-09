@@ -10,7 +10,6 @@ module.exports = {
     let newMessage = "";
     try {
       client.questions.forEach((q, index) => {
-        console.log("index: ", index, newMessage);
         if (index > 0) newMessage += "\n";
         newMessage += `${index + 1}. ${q.options.getString("question")} ${
           q.channel

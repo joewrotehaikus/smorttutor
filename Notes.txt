@@ -1,0 +1,10 @@
+- show questions
+  Do we need this user ask, user answer setup?
+  Can we put those user questions in database?
+  Can we, perhaps, send the question as a search to MDN or something?
+
+- smortquiz to a modal with text input and question as label
+
+- editQuizEntry
+    much much to do
+    would need a series of modals if using text inputs

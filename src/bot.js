@@ -1,12 +1,12 @@
 require("dotenv").config();
-const mongoose = require("mongoose");
-const fs = require("fs");
+const { set, connect, connection } = require("mongoose");
+const { readdirSync } = require("fs");
 const { BOT_TOKEN, DB_URL } = process.env;
 
 try {
-  mongoose.set("strictQuery", false);
-  mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-  const db = mongoose.connection;
+  set("strictQuery", false);
+  connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+  const db = connection;
 
   db.once("open", () => {
     console.log("Connected to database");
@@ -37,11 +37,11 @@ client.buttons = new Collection();
 client.selectMenus = new Collection();
 client.questions = [];
 
-const functionFolders = fs.readdirSync("./src/functions");
+const functionFolders = readdirSync("./src/functions");
 for (const folder of functionFolders) {
-  const functionFiles = fs
-    .readdirSync(`./src/functions/${folder}`)
-    .filter((file) => file.endsWith(".js"));
+  const functionFiles = readdirSync(`./src/functions/${folder}`).filter(
+    (file) => file.endsWith(".js")
+  );
 
   for (const file of functionFiles) {
     require(`./functions/${folder}/${file}`)(client);
@@ -55,6 +55,6 @@ try {
   client.handleComponents();
   client.login(BOT_TOKEN);
 } catch (e) {
-  console.error(`ERROR: ${e.name || "General"}`)
+  console.error(`ERROR: ${e.name || "General"}`);
   console.error(e.message);
 }

@@ -4,30 +4,13 @@ const {
   TextInputBuilder,
   TextInputStyle,
   ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
 } = require("discord.js");
-// const stringCompare = require("../../code/stringCompare");
 const { STRING_COMPARE } = require("../../code/commandNames");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName(STRING_COMPARE)
     .setDescription("See how closely one string matches another"),
-  // .addStringOption((option) => {
-  //   return option
-  //     .setName("first")
-  //     .setDescription("First String")
-  //     .setRequired(true)
-  //     .setMaxLength(300);
-  // })
-  // .addStringOption((option) => {
-  //   return option
-  //     .setName("second")
-  //     .setDescription("Second String")
-  //     .setRequired(true)
-  //     .setMaxLength(300);
-  // }),
 
   async execute(interaction, client) {
     let newMessage = "";
@@ -50,9 +33,6 @@ module.exports = {
 
       const row1 = new ActionRowBuilder().addComponents(string1);
       const row2 = new ActionRowBuilder().addComponents(string2);
-      // const buttonrow = new ActionRowBuilder().addComponents(button);
-
-      // modal.addComponents(row1, row2, buttonrow);
       modal.addComponents(row1, row2);
 
       await interaction.showModal({
@@ -105,37 +85,14 @@ module.exports = {
               },
             ],
           },
-          // {
-          //   type: 1,
-          //   components: [
-          //     {
-          //       type: 3,
-          //       custom_id: "donotuse",
-          //       label: "This button does nothing. Do not click.",
-          //       placeholder: "Select something",
-          //       options: [
-          //         {
-          //           label: "choice 1",
-          //           value: "choice1",
-          //         },
-          //         {
-          //           label: "choice 2",
-          //           value: "choice21",
-          //         },
-          //       ],
-          //     },
-          //   ],
-          // },
         ],
       });
-      // await interaction.showModal(modal);
     } catch (e) {
       if (newMessage.length > 0) newMessage += "\n";
       newMessage += `I'm having trouble with something. I got this error:\n   ${
         e.name || "Error"
       }: ${e.message}`;
-    } finally {
-      // await interaction.reply({ content: newMessage });
+      await interaction.reply({ content: newMessage });
     }
   },
 };

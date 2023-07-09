@@ -50,7 +50,6 @@ module.exports = {
       const { selectMenus } = client;
       const { customId } = interaction;
       const menu = selectMenus.get(customId);
-      console.log(customId, "Menu");
       try {
         if (!menu) throw Error("Menu not found");
         await menu.execute(interaction, client);
