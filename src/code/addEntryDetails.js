@@ -35,6 +35,7 @@ function addEntryDetails(
   if (options.slug) {
     newMessage += `\n\nTo edit this question, add other acceptable answers, and/or add more reliable sources, use \`/${EDIT_QUIZ.EDIT}\` and enter \`${entry.slug}\` into the ID option.`;
   }
+  console.log("This is from addEntryDetails: " + newMessage)
 
   return newMessage;
 }
