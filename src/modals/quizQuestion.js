@@ -1,4 +1,4 @@
-import stringCompare from "./stringCompare";
+const stringCompare = require("./stringCompare");
 
 module.exports = {
     name: "quizQuestion",
