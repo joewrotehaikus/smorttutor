@@ -60,7 +60,7 @@ module.exports = {
       } else {
         interaction.showModal({
           custom_id: "quizQuestion",
-          title: `<@${interaction.user.id}>, your question is:`,
+          title: `<@${interaction.user.tag}>, your question is:`,
           components: [
             {
               type: 1,
