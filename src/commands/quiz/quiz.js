@@ -65,12 +65,16 @@ module.exports = {
               components: [
                 {
                   type: 4,
-                  custom_id: "question",
-                  label: prompt.slice(0, 44),
+                  custom_id: "prompt",
+                  label: "Question",
                   style: 1,
-                  data: {
-                    content: prompt
-                  }
+                  value: prompt,
+                },
+                {
+                  type: 4,
+                  custom_id: "question",
+                  label: "Your answer",
+                  style: 1,
                 },
               ],
             },
