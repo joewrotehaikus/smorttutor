@@ -42,7 +42,6 @@ module.exports = {
       if (question[0] != undefined) {
         client.quiz[user] = question[0];
         prompt = question[0].question;
-        newMessage += `<@${user}>, your question is:\n> ${question[0].question}\n\nTo answer, use \`/${ANSWER_QUIZ}\``;
       } else {
         newMessage += `No questions for topic "${topic}" at level "${level}" are available`;
       }
@@ -67,7 +66,7 @@ module.exports = {
                   type: 4,
                   custom_id: "prompt",
                   label: "Question",
-                  style: 1,
+                  style: 2,
                   value: prompt,
                 },
               ],
