@@ -70,6 +70,11 @@ module.exports = {
                   style: 1,
                   value: prompt,
                 },
+              ],
+            },
+            {
+              type: 1,
+              components: [
                 {
                   type: 4,
                   custom_id: "question",
