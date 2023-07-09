@@ -38,7 +38,6 @@ module.exports = {
         { $match: { topic, level } },
         { $sample: { size: 1 } },
       ]).exec();
-      console.log(question[0]);
       let user = interaction.user.id;
       if (!client.quiz) client.quiz = {};
       if (question[0] != undefined) {
@@ -61,7 +60,7 @@ module.exports = {
       } else {
         interaction.showModal({
           custom_id: "quizQuestion",
-          title: `<@${user}>, your question is:`,
+          title: `<@${interaction.user.id}>, your question is:`,
           components: [
             {
               type: 1,
