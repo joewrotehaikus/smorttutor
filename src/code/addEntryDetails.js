@@ -24,7 +24,7 @@ function addEntryDetails(
   if (options.sources || options.sources == undefined) {
     entry.sources.forEach((src, index) => {
       if (entry.sources.length === 1) {
-        newMessage += `\nSource`;
+        newMessage += `\n\nSource`;
       } else {
         newMessage += `\nSource ${index}`;
       }
@@ -35,7 +35,6 @@ function addEntryDetails(
   if (options.slug || options.slug == undefined) {
     newMessage += `\n\nTo edit this question, add other acceptable answers, and/or add more reliable sources, use \`/${EDIT_QUIZ.EDIT}\` and enter \`${entry.slug}\` into the ID option.`;
   }
-  console.log("This is from addEntryDetails: " + newMessage)
 
   return newMessage;
 }
