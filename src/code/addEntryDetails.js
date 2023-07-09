@@ -5,7 +5,8 @@ function addEntryDetails(
   message,
   options = { question: true, answers: true, sources: true, slug: true }
 ) {
-  let newMessage = message;
+  let newMessage = "";
+  newMessage += message;
   if (options.question) {
     newMessage += `\n\nQuestion:\n> ${entry.question}\n`;
   }
