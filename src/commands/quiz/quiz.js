@@ -66,7 +66,7 @@ module.exports = {
                 {
                   type: 4,
                   custom_id: "question",
-                  label: prompt,
+                  label: prompt.slice(0, 44),
                   style: 1,
                   data: {
                     content: prompt
