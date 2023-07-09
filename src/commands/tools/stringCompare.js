@@ -62,29 +62,6 @@ module.exports = {
               },
             ],
           },
-          {
-            type: 1,
-            components: [
-              {
-                type: 4,
-                custom_id: "string3",
-                label: "First",
-                style: 1,
-              },
-            ],
-          },
-          {
-            type: 1,
-            components: [
-              {
-                type: 4,
-                custom_id: "string4",
-                label: "Second",
-                style: 2,
-                value: "heyo",
-              },
-            ],
-          },
         ],
       });
     } catch (e) {
