@@ -5,13 +5,12 @@ function addEntryDetails(
   message,
   options = { question: true, answers: true, sources: true, slug: true }
 ) {
-  let newMessage = "";
-  newMessage += `${message}`;
-  if (options.question) {
+  let newMessage = message;
+  if (options.question || options.question == undefined) {
     newMessage += `\n\nQuestion:\n> ${entry.question}\n`;
   }
 
-  if (options.answers) {
+  if (options.answers || options.answers == undefined) {
     entry.answers.forEach((ans, index) => {
       if (entry.answers.length === 1) {
         newMessage += `\nAnswer\n`;
@@ -22,7 +21,7 @@ function addEntryDetails(
     });
   }
 
-  if (options.sources) {
+  if (options.sources || options.sources == undefined) {
     entry.sources.forEach((src, index) => {
       if (entry.sources.length === 1) {
         newMessage += `\nSource`;
@@ -33,7 +32,7 @@ function addEntryDetails(
     });
   }
 
-  if (options.slug) {
+  if (options.slug || options.slug == undefined) {
     newMessage += `\n\nTo edit this question, add other acceptable answers, and/or add more reliable sources, use \`/${EDIT_QUIZ.EDIT}\` and enter \`${entry.slug}\` into the ID option.`;
   }
   console.log("This is from addEntryDetails: " + newMessage)
