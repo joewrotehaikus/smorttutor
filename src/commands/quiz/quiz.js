@@ -28,9 +28,11 @@ module.exports = {
   async execute(interaction, client) {
     let newMessage = "";
     let ephemeral = false;
+    let topic;
+    let prompt;
 
     try {
-      let topic = interaction.options.getString("topic");
+      topic = interaction.options.getString("topic");
       let level = interaction.options.get("level").value;
       const question = await QuizEntry.aggregate([
         { $match: { topic, level } },
@@ -41,6 +43,7 @@ module.exports = {
       if (!client.quiz) client.quiz = {};
       if (question[0] != undefined) {
         client.quiz[user] = question[0];
+        prompt = question[0].question;
         newMessage += `<@${user}>, your question is:\n> ${question[0].question}\n\nTo answer, use \`/${ANSWER_QUIZ}\``;
       } else {
         newMessage += "No questions for that topic and level are available";
@@ -52,8 +55,28 @@ module.exports = {
       }: ${e.message}`;
       ephemeral = true;
     } finally {
-      if (newMessage.length === 0) newMessage += "No questions available";
-      await interaction.reply({ content: newMessage, ephemeral });
+      if (newMessage.length === 0 || prompt == undefined) {
+        newMessage += `No questions available for ${topic}`;
+        await interaction.reply({ content: newMessage, ephemeral });
+      } else {
+        interaction.showModal({
+          custom_id: "quizQuestion",
+          title: `<@${user}>, your question is:`,
+          components: [
+            {
+              type: 1,
+              components: [
+                {
+                  type: 4,
+                  custom_id: "question",
+                  label: prompt.slice(0, 45),
+                  style: 1,
+                },
+              ],
+            },
+          ],
+        });
+      }
     }
   },
 };
