@@ -1,42 +1,53 @@
 const { EDIT_QUIZ } = require("./commandNames");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
 function addEntryDetails(
   entry,
-  message,
+  replyObject,
   options = { question: true, answers: true, sources: true, slug: true }
 ) {
-  let newMessage = message;
+  // let replyObject.content = replyObject;
   if (options.question || options.question == undefined) {
-    newMessage += `\n\nQuestion:\n> ${entry.question}\n`;
+    replyObject.content += `\n\nQuestion:\n> ${entry.question}\n`;
   }
 
   if (options.answers || options.answers == undefined) {
     entry.answers.forEach((ans, index) => {
       if (entry.answers.length === 1) {
-        newMessage += `\nAnswer\n`;
+        replyObject.content += `\nAnswer\n`;
       } else {
-        newMessage += `\nAnswer ${index}\n`;
+        replyObject.content += `\nAnswer ${index}\n`;
       }
-      newMessage += `> ${ans}`;
+      replyObject.content += `> ${ans}`;
     });
   }
 
   if (options.sources || options.sources == undefined) {
+    replyObject.components = [];
+    let row = new ActionRowBuilder();
+    replyObject.components.push(row);
     entry.sources.forEach((src, index) => {
-      if (entry.sources.length === 1) {
-        newMessage += `\n\nSource`;
-      } else {
-        newMessage += `\nSource ${index}`;
+      const btn = new ButtonBuilder()
+        .setCustomId(`btn_${index}`)
+        .setLabel(src)
+        .setStyle(ButtonStyle.Primary);
+      if (index < 5) {
+        row.addComponents(btn);
       }
-      newMessage += `\n> ${src}`;
+      // if (entry.sources.length === 1) {
+      //   replyObject.content += `\n\nSource`;
+      // } else {
+      //   replyObject.content += `\nSource ${index}`;
+      // }
+      // replyObject.content += `\n> ${src}`;
     });
   }
 
   if (options.slug || options.slug == undefined) {
-    newMessage += `\n\nTo edit this question, add other acceptable answers, and/or add more reliable sources, use \`/${EDIT_QUIZ.EDIT}\` and enter \`${entry.slug}\` into the ID option.`;
+    replyObject.content += `\n\nTo edit this question, add other acceptable answers, and/or add more reliable sources, use \`/${EDIT_QUIZ.EDIT}\` and enter \`${entry.slug}\` into the ID option.`;
   }
 
-  return newMessage;
+  return replyObject.content;
 }
 
 module.exports = addEntryDetails;
