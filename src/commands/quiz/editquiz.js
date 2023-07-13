@@ -212,7 +212,8 @@ module.exports = {
   async autocomplete(interaction, client) {
     const focusedValue = interaction.options.getFocused();
     const regex = new RegExp(focusedValue, "i");
-    const choices = await QuizEntry.find({ question: { $regex: regex } });
+    // const choices = await QuizEntry.find({ question: { $regex: regex } });
+    const choices = ["blah", "blah", "blah", "dee", "blah"]
 
     await interaction.respond(
       choices.map((choice) => ({ name: choice.question, value: choice._id }))
