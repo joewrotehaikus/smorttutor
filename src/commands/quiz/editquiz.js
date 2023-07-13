@@ -205,6 +205,7 @@ module.exports = {
       await interaction.reply({
         content: newMessage,
         ephemeral,
+        suppressEmbeds: true,
       });
     }
   },

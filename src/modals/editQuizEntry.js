@@ -20,6 +20,7 @@ module.exports = {
       await interaction.reply({
         content: "Hey, we made it here!!!",
         ephemeral: true,
+        suppressEmbeds: true,
       });
     }
   },

@@ -31,6 +31,7 @@ module.exports = {
     } finally {
       await interaction.reply({
         content: newMessage,
+        suppressEmbeds: true,
       });
     }
   },
