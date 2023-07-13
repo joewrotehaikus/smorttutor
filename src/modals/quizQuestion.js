@@ -25,7 +25,7 @@ module.exports = {
 
       // Will change soon
       // newMessage = 
-      addEntryDetails(quiz, newMessage, { slug: false });
+      addEntryDetails(quiz, replyObj, { slug: false });
     } catch (e) {
       if (replyObj.content.length > 0) replyObj.content += "\n";
       replyObj.content += `I'm having trouble with something. I got this error:\n   ${

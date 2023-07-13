@@ -195,7 +195,7 @@ module.exports = {
 
       // will change soon
       // newMessage = 
-      addEntryDetails(entry, newMessage);
+      addEntryDetails(entry, replyObj);
     } catch (e) {
       if (replyObj.content.length > 0) replyObj.content += "\n";
       replyObj.content += `I'm having trouble with something. I got this error:\n   ${
