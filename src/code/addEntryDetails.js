@@ -30,6 +30,7 @@ function addEntryDetails(
       const btn = new ButtonBuilder()
         .setCustomId(`btn_${index}`)
         .setLabel(src)
+        .setURL(src)
         .setStyle(ButtonStyle.Primary);
       if (index < 5) {
         row.addComponents(btn);
