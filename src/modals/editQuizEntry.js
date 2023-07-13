@@ -1,11 +1,12 @@
-const addEntryDetails = require("../code/addEntryDetails");
+// const addEntryDetails = require("../code/addEntryDetails");
 const QuizEntry = require("../models/QuizEntry");
 
 module.exports = {
   name: "editQuizEntry",
 
   async execute(interaction, client) {
-    let newMessage = "";
+    // let newMessage = "";
+    let replyObj = {content: "Hey, we made it here!!", ephemeral: true}
     try {
       let _id = interaction.fields.getTextInputValue("id");
       const entry = await QuizEntry.find({ _id });
@@ -17,11 +18,7 @@ module.exports = {
     } catch (e) {
       console.error(e.name, e.message);
     } finally {
-      await interaction.reply({
-        content: "Hey, we made it here!!!",
-        ephemeral: true,
-        suppressEmbeds: true,
-      });
+      await interaction.reply(replyObj);
     }
   },
 };

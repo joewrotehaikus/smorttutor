@@ -26,8 +26,8 @@ module.exports = {
     }),
 
   async execute(interaction, client) {
-    let newMessage = "";
-    let ephemeral = false;
+    let replyObj = {content: "", ephemeral: false};
+    // let ephemeral = false;
     let prompt;
 
     try {
@@ -43,17 +43,17 @@ module.exports = {
         client.quiz[user] = question[0];
         prompt = question[0].question;
       } else {
-        newMessage += `No questions for topic "${topic}" at level "${level}" are available`;
+        replyObj.content += `No questions for topic "${topic}" at level "${level}" are available`;
       }
     } catch (e) {
-      if (newMessage.length > 0) newMessage += "\n";
-      newMessage += `I'm having trouble with something. I got this error:\n   ${
+      if (replyObj.content.length > 0) replyObj.content += "\n";
+      replyObj.content += `I'm having trouble with something. I got this error:\n   ${
         e.name || "Error"
       }: ${e.message}`;
-      ephemeral = true;
+      replyObj.ephemeral = true;
     } finally {
       if (prompt == undefined) {
-        await interaction.reply({ content: newMessage, ephemeral });
+        await interaction.reply(replyObj);
       } else {
         interaction.showModal({
           custom_id: "quizQuestion",

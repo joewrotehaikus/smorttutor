@@ -7,22 +7,23 @@ module.exports = {
     .setDescription("This will give you the list of all pending questions"),
 
   async execute(interaction, client) {
-    let newMessage = "";
+    let replyObj = { content: "", ephemeral: true };
     try {
       client.questions.forEach((q, index) => {
-        if (index > 0) newMessage += "\n";
-        newMessage += `${index + 1}. ${q.options.getString("question")} ${
+        if (index > 0) replyObj.content += "\n";
+        replyObj.content += `${index + 1}. ${q.options.getString("question")} ${
           q.channel
         }`;
       });
     } catch (e) {
-      if (newMessage.length > 0) newMessage += "\n";
-      newMessage += `I'm having trouble with something. I got this error:\n   ${
+      if (replyObj.content.length > 0) replyObj.content += "\n";
+      replyObj.content += `I'm having trouble with something. I got this error:\n   ${
         e.name || "Error"
       }: ${e.message}`;
     } finally {
-      if (newMessage.length === 0) newMessage += "No questions available";
-      await interaction.reply({ content: newMessage, ephemeral: true });
+      if (replyObj.content.length === 0)
+        replyObj.content += "No questions available";
+      await interaction.reply(replyObj);
     }
   },
 };

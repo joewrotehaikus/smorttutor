@@ -23,10 +23,10 @@ module.exports = {
     }),
 
   async execute(interaction, client) {
-    let newMessage = "";
+    let replyObj = { content: "", ephemeral: true };
     try {
       let user = interaction.member.user;
-      newMessage += `Thank you, ${user.username}! You saved my reputation!`;
+      replyObj.content += `Thank you, ${user.username}! You saved my reputation!`;
       let index = interaction.options.get("question_number").value - 1;
       let question =
         client.questions[
@@ -39,12 +39,12 @@ module.exports = {
         content: response,
       });
     } catch (e) {
-      if (newMessage.length > 0) newMessage += "\n";
-      newMessage += `I'm having trouble with something. I got this error:\n   ${
+      if (replyObj.content.length > 0) replyObj.content += "\n";
+      replyObj.content += `I'm having trouble with something. I got this error:\n   ${
         e.name || "Error"
       }: ${e.message}`;
     } finally {
-      await interaction.reply({ content: newMessage, ephemeral: true });
+      await interaction.reply(replyObj);
     }
   },
 };

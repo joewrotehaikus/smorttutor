@@ -18,14 +18,14 @@ module.exports = {
     }),
 
   async execute(interaction, client) {
-    let newMessage = "";
-    let ephemeral = false;
+    // let newMessage = "";
+    let replyObj = { content: "", ephemeral: false };
 
     try {
       let answer = interaction.options.getString("answer");
       let user = interaction.user.id;
       if (!client.quiz) {
-        newMessage += `Before you can answer a quiz question, you must use \`/${TAKE_QUIZ}\` to receive a question`;
+        replyObj.content += `Before you can answer a quiz question, you must use \`/${TAKE_QUIZ}\` to receive a question`;
         return;
       }
       let quiz = client.quiz[user];
@@ -40,35 +40,23 @@ module.exports = {
         );
       });
       if (matchCorrect) {
-        newMessage += "Correct!";
+        replyObj.content += "Correct!";
       } else {
-        newMessage += `I'm sorry, but "${answer}" is not correct`;
+        replyObj.content += `I'm sorry, but "${answer}" is not correct`;
       }
 
-      // let comparison = stringCompare(
-      //   quiz.answer.toLowerCase(),
-      //   answer.toLowerCase()
-      // );
-      // if (comparison > 0.8) {
-      //   newMessage += "Correct!";
-      // } else {
-      //   newMessage += "I'm sorry, but that is not correct";
-      // }
-      // newMessage += `\n\nQuestion:\n> ${quiz.question}\n\nAnswer:\n> ${quiz.answer}\n\nSource:\n> ${quiz.sourceURL}`;
+      // This will soon change
       newMessage = addEntryDetails(quiz, newMessage);
     } catch (e) {
-      if (newMessage.length > 0) newMessage += "\n";
-      newMessage += `I'm having trouble with something. I got this error:\n   ${
+      if (replyObj.content.length > 0) replyObj.content += "\n";
+      replyObj.content += `I'm having trouble with something. I got this error:\n   ${
         e.name || "Error"
       }: ${e.message}`;
-      ephemeral = true;
+      // ephemeral = true;
+      replyObj.ephemeral = true;
     } finally {
-      if (newMessage.length === 0) newMessage += "No questions available";
-      await interaction.reply({
-        content: newMessage,
-        ephemeral,
-        suppressEmbeds: true,
-      });
+      if (replyObj.content.length === 0) replyObj.content += "No questions available";
+      await interaction.reply(replyObj);
     }
   },
 };

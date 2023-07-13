@@ -85,8 +85,9 @@ module.exports = {
     }),
 
   async execute(interaction, client) {
-    let newMessage = "";
-    let ephemeral = false;
+    // let newMessage = "";
+    // let ephemeral = false;
+    let replyObj = { content: "", ephemeral: false};
 
     try {
       let entry;
@@ -98,7 +99,7 @@ module.exports = {
           _id: id,
         });
         if (!entry) {
-          newMessage += `We could not find a record with the _id "${id}". Please check and try again.\n`;
+          replyObj.content += `We could not find a record with the _id "${id}". Please check and try again.\n`;
           ephemeral = true;
           return;
         }
@@ -188,25 +189,22 @@ module.exports = {
           contributors: [user],
           sources: [interaction.options.getString("source")],
         });
-        newMessage += `Quiz question received!\n\n`;
+        replyObj.content += `Quiz question received!\n\n`;
         await entry.save();
       }
 
+      // will change soon
       newMessage = addEntryDetails(entry, newMessage);
     } catch (e) {
-      if (newMessage.length > 0) newMessage += "\n";
-      newMessage += `I'm having trouble with something. I got this error:\n   ${
+      if (replyObj.content.length > 0) replyObj.content += "\n";
+      replyObj.content += `I'm having trouble with something. I got this error:\n   ${
         e.name || "Error"
       }: ${e.message}`;
       ephemeral = true;
       console.error(e);
     } finally {
-      if (newMessage.length === 0) newMessage += "No questions available";
-      await interaction.reply({
-        content: newMessage,
-        ephemeral,
-        suppressEmbeds: true,
-      });
+      if (replyObj.content.length === 0) replyObj.content += "No questions available";
+      await interaction.reply(replyObj);
     }
   },
 

@@ -5,7 +5,8 @@ module.exports = {
   name: "quizQuestion",
 
   async execute(interaction, client) {
-    let newMessage = "";
+    // let newMessage = "";
+    let replyObj = { content: "", ephemeral: false};
     try {
       let quiz = client.quiz[interaction.user.id];
       let answer = interaction.fields.getTextInputValue("question");
@@ -17,22 +18,20 @@ module.exports = {
         );
       });
       if (matchCorrect) {
-        newMessage += "Correct!";
+        replyObj.content += "Correct!";
       } else {
-        newMessage += `I'm sorry, but "${answer}" is not correct`;
+        replyObj.content += `I'm sorry, but "${answer}" is not correct`;
       }
 
+      // Will change soon
       newMessage = addEntryDetails(quiz, newMessage, { slug: false });
     } catch (e) {
-      if (newMessage.length > 0) newMessage += "\n";
-      newMessage += `I'm having trouble with something. I got this error:\n   ${
+      if (replyObj.content.length > 0) replyObj.content += "\n";
+      replyObj.content += `I'm having trouble with something. I got this error:\n   ${
         e.name || "Error"
       }: ${e.message}`;
     } finally {
-      await interaction.reply({
-        content: newMessage,
-        suppressEmbeds: true,
-      });
+      await interaction.reply(replyObj);
     }
   },
 };
