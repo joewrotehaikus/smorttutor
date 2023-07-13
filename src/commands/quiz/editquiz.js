@@ -213,7 +213,7 @@ module.exports = {
     const focusedValue = interaction.options.getFocused();
     const regex = new RegExp(focusedValue, "i");
     // const choices = await QuizEntry.find({ question: { $regex: regex } });
-    const choices = ["blah", "blah", "blah", "dee", "blah"]
+    const choices = [{name: "blah", value: 0},{name: "lorem", value: 1},{name: "ipsum", value: 2}]
 
     await interaction.respond(
       choices.map((choice) => ({ name: choice.question, value: choice._id }))
