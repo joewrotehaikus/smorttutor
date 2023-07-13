@@ -28,7 +28,6 @@ function addEntryDetails(
     replyObject.components.push(row);
     entry.sources.forEach((src, index) => {
       const btn = new ButtonBuilder()
-        .setCustomId(`btn_${index}`)
         .setLabel(src)
         .setURL(src)
         .setStyle(ButtonStyle.Primary);
