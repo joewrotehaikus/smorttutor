@@ -205,7 +205,6 @@ module.exports = {
       await interaction.reply({
         content: newMessage,
         ephemeral,
-        allowedMentions: { parse: [] },
       });
     }
   },

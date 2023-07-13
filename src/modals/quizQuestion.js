@@ -31,7 +31,6 @@ module.exports = {
     } finally {
       await interaction.reply({
         content: newMessage,
-        allowedMentions: { parse: [] },
       });
     }
   },
