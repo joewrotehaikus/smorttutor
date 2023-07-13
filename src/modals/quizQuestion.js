@@ -29,7 +29,10 @@ module.exports = {
         e.name || "Error"
       }: ${e.message}`;
     } finally {
-      await interaction.reply({ content: newMessage });
+      await interaction.reply({
+        content: newMessage,
+        allowedMentions: { parse: [] },
+      });
     }
   },
 };
