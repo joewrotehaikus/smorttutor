@@ -202,7 +202,11 @@ module.exports = {
       console.error(e);
     } finally {
       if (newMessage.length === 0) newMessage += "No questions available";
-      await interaction.reply({ content: newMessage, ephemeral });
+      await interaction.reply({
+        content: newMessage,
+        ephemeral,
+        allowedMentions: { parse: [] },
+      });
     }
   },
 

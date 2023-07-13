@@ -64,7 +64,11 @@ module.exports = {
       ephemeral = true;
     } finally {
       if (newMessage.length === 0) newMessage += "No questions available";
-      await interaction.reply({ content: newMessage, ephemeral });
+      await interaction.reply({
+        content: newMessage,
+        ephemeral,
+        allowedMentions: { parse: [] },
+      });
     }
   },
 };
