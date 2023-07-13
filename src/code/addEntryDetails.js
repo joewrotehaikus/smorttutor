@@ -30,7 +30,7 @@ function addEntryDetails(
       const btn = new ButtonBuilder()
         .setLabel(src)
         .setURL(src)
-        .setStyle(ButtonStyle.Primary);
+        .setStyle(ButtonStyle.Link);
       if (index < 5) {
         row.addComponents(btn);
       }
