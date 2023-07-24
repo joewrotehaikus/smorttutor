@@ -6,7 +6,6 @@ function addEntryDetails(
   replyObject,
   options = { question: true, answers: true, sources: true, slug: true }
 ) {
-  // let replyObject.content = replyObject;
   if (options.question || options.question == undefined) {
     replyObject.content += `\n\nQuestion:\n> ${entry.question}\n`;
   }
