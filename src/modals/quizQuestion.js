@@ -23,8 +23,6 @@ module.exports = {
         replyObj.content += `I'm sorry, but "${answer}" is not correct`;
       }
 
-      // Will change soon
-      // newMessage = 
       addEntryDetails(quiz, replyObj, { slug: false });
     } catch (e) {
       if (replyObj.content.length > 0) replyObj.content += "\n";
