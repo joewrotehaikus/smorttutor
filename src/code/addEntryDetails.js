@@ -34,12 +34,14 @@ function addEntryDetails(
       if (index < 5) {
         row.addComponents(btn);
       }
-      // if (entry.sources.length === 1) {
-      //   replyObject.content += `\n\nSource`;
-      // } else {
-      //   replyObject.content += `\nSource ${index}`;
-      // }
-      // replyObject.content += `\n> ${src}`;
+      /*
+       if (entry.sources.length === 1) {
+         replyObject.content += `\n\nSource`;
+       } else {
+         replyObject.content += `\nSource ${index}`;
+       }
+       replyObject.content += `\n> ${src}`;
+       */
     });
   }
 
